@@ -18,6 +18,8 @@ function filterSystemRouter(systemRouter, roles) {
     }
     return false
   })
+  console.log('accessedRouters: ')
+  console.log(accessedRouters)
   return accessedRouters
 }
 
@@ -37,7 +39,7 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
-        if (roles.includes('admin')) {
+        if (roles.includes('admin')) { // 根据不同角色生成不同路由
           accessedRouters = systemMsgRouterMap
         } else {
           accessedRouters = filterSystemRouter(systemMsgRouterMap, roles)

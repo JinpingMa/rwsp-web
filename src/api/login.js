@@ -25,3 +25,25 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function addUser(username, password, userType) {
+  return request({
+    url: '/adduser',
+    method: 'post',
+    data: {
+      username,
+      password,
+      userType
+    }
+  })
+}
+
+export function deleteUser(id) {
+  return request({
+    url: '/deleteUser',
+    method: 'post',
+    data: {
+      id
+    }
+  })
+}

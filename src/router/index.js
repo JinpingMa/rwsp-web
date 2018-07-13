@@ -17,6 +17,7 @@ import MngLayout from '../views/layout/MngLayout'
 *                                it will becomes nested mode, otherwise not show the root menu
 * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
 * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * roles: []                     the roles of user
 * meta : {
     title: 'title'               the name show in submenu and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar,
@@ -28,205 +29,146 @@ export const constantRouterMap = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-  { path: '/404', component: () => import('@/views/404'), hidden: true },
+  { path: '/404', component: () => import('@/views/404'), hidden: true }
+]
+
+export const systemMsgRouterMap = [
   {
     path: '',
     component: Layout,
     redirect: 'citywide-std',
+    meta: {
+      roles: ['admin', 'citywide']
+    },
     children: [
       {
         path: 'citywide-std',
         name: 'CitywideStd',
         component: () => import('@/views/citywide_standard/index'),
-        meta: { title: '全市标准' }
+        meta: { title: '全市标准', roles: ['admin', 'citywide'] }
       }
     ]
   },
   {
-    path: '/equeal',
+    path: '',
     component: Layout,
+    redirect: 'equal',
+    meta: {
+      roles: ['admin', 'equal']
+    },
     children: [
       {
-        path: 'index',
-        name: '同级同类医疗机构',
+        path: 'equal',
+        name: 'Equal',
         component: () => import('@/views/equeal_level/index'),
-        meta: { title: '同级同类医疗机构' }
+        meta: { title: '同级同类医疗机构', roles: ['admin', 'equal'] }
       }
     ]
   },
   {
-    path: '/total-area',
+    path: '',
     component: Layout,
+    redirect: 'total-area',
+    meta: {
+      roles: ['admin', 'totalarea']
+    },
     children: [
       {
-        path: 'index',
+        path: 'total-area',
         name: '全区标准',
         component: () => import('@/views/whole_district_std/index'),
-        meta: { title: '全区标准' }
+        meta: { title: '全区标准', roles: ['admin', 'totalarea'] }
       }
     ]
   },
   {
-    path: '/hospital',
+    path: '',
     component: Layout,
+    redirect: 'hospital',
+    meta: {
+      roles: ['admin', 'hospital']
+    },
     children: [
       {
-        path: 'index',
+        path: 'hospital',
         name: '本医院数据',
         component: () => import('@/views/hospital_data/index'),
-        meta: { title: '本医院数据' }
+        meta: { title: '本医院数据', roles: ['admin', 'hospital'] }
       }
     ]
   },
   {
     path: '/logs',
     component: Layout,
+    meta: {
+      roles: ['admin']
+    },
     children: [
       {
         path: 'index',
         name: 'Log',
         component: () => import('@/views/logs/index'),
-        meta: { title: '日志' }
+        meta: { title: '日志', roles: ['admin'] }
       }
     ]
-  }
-  // {
-  //   path: '/user-manage',
-  //   component: MngLayout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'UserManage',
-  //       component: () => import('@/views/user_manage/index'),
-  //       meta: { title: '用户管理' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/data-manage',
-  //   component: MngLayout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'DataManage',
-  //       component: () => import('@/views/data_manage/index'),
-  //       meta: { title: '数据管理' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/service-manage',
-  //   component: MngLayout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'ServiceManage',
-  //       component: () => import('@/views/service_manage/index'),
-  //       meta: { title: '服务管理' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/dashboard',
-  //   component: Layout,
-  //   redirect: '/dashboard/index',
-  //   name: 'Dashboard',
-  //   hidden: true,
-  //   children: [{
-  //     path: 'index',
-  //     component: () => import('@/views/dashboard/index')
-  //   }]
-  // }, {
-  //   path: '/example',
-  //   component: Layout,
-  //   redirect: '/example/table',
-  //   name: 'Example',
-  //   meta: { title: 'Example', icon: 'example' },
-  //   children: [
-  //     {
-  //       path: 'table',
-  //       name: 'Table',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: 'Table', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'tree',
-  //       name: 'Tree',
-  //       component: () => import('@/views/tree/index'),
-  //       meta: { title: 'tree', icon: 'tree' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: () => import('@/views/form/index'),
-  //       meta: { title: 'Form', icon: 'form' }
-  //     }
-  //   ]
-  // }, {
-  //   path: '/tree',
-  //   component: Layout,
-  //   name: 'Trees',
-  //   meta: { title: 'Trees', icon: 'tree' },
-  //   redirect: '/tree/index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'TreeIndex',
-  //       component: () => import('@/views/tree/index'),
-  //       meta: { title: 'tree', icon: 'tree' }
-  //     },
-  //     {
-  //       path: 'select-tree',
-  //       name: 'SelectTree',
-  //       component: () => import('@/views/tree/select-tree'),
-  //       meta: { title: 'select-tree', icon: 'tree' }
-  //     }
-  //   ]
-  // },
-
-  // { path: '*', redirect: '/404', hidden: true }
-]
-
-export const systemMsgRouterMap = [
+  },
+  {
+    path: '/user-manage1',
+    component: MngLayout,
+    meta: {
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'UserManage1',
+        component: () => import('@/views/user_manage/index'),
+        meta: { title: '用户管理1', roles: ['admin'] }
+      }
+    ]
+  },
   {
     path: '/user-manage',
     component: MngLayout,
+    meta: {
+      roles: ['admin']
+    },
     children: [
       {
         path: 'index',
         name: 'UserManage',
-        component: () => import('@/views/user_manage/index'),
-        meta: { title: '用户管理' }
+        component: () => import('@/views/userMng/index'),
+        meta: { title: '用户管理', roles: ['admin'] }
       }
     ]
   },
   {
     path: '/data-manage',
     component: MngLayout,
+    meta: {
+      roles: ['admin']
+    },
     children: [
       {
         path: 'index',
         name: 'DataManage',
         component: () => import('@/views/data_manage/index'),
-        meta: { title: '数据管理' }
+        meta: { title: '数据管理', roles: ['admin'] }
       }
     ]
   },
   {
     path: '/service-manage',
     component: MngLayout,
+    meta: {
+      roles: ['admin']
+    },
     children: [
       {
         path: 'index',
         name: 'ServiceManage',
         component: () => import('@/views/service_manage/index'),
-        meta: { title: '服务管理' }
+        meta: { title: '服务管理', roles: ['admin'] }
       }
     ]
   }

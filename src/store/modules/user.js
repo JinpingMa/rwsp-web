@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, logout, getInfo, addUser, deleteUser } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -26,7 +26,7 @@ const user = {
 
   actions: {
     // 登录
-    Login({ commit }, userInfo) {
+    LoginByUserName({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
@@ -79,6 +79,34 @@ const user = {
         commit('SET_TOKEN', '')
         removeToken()
         resolve()
+      })
+    },
+
+    // 添加用户
+    AddUsers({ commit }, userInfo) {
+      const username = userInfo.username.trim()
+      return new Promise((resolve, reject) => {
+        addUser(username, userInfo.password, userInfo.userType).then(response => {
+          const data = response.data
+          console.log(data.message)
+          // setToken(data.token)
+          // commit('SET_TOKEN', data.token)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 删除用户
+    DeleteUser({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        deleteUser(id).then(response => {
+          console.log('delete user' + id)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
       })
     }
   }

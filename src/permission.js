@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       if (store.getters.roles.length === 0) {
-        store.dispatch('GetInfo').then(res => { // 拉取用户信息
+        store.dispatch('GetInfo').then(res => { // 拉取用户信息，roles: ['admin1']由后台获取的用户角色，此处写死
           store.dispatch('GenerateRouters', { roles: ['admin'] }).then(() => {
             router.addRoutes(store.getters.addRouters)
             next({ ...to, replace: true })
