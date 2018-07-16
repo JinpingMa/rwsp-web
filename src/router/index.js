@@ -50,31 +50,31 @@ export const systemMsgRouterMap = [
     ]
   },
   {
-    path: '',
+    path: '/equal',
     component: Layout,
-    redirect: 'equal',
+    redirect: '/equal/index',
     meta: {
       roles: ['admin', 'equal']
     },
     children: [
       {
-        path: 'equal',
+        path: 'index',
         name: 'Equal',
-        component: () => import('@/views/equeal_level/index'),
+        component: () => import('@/views/equal_level/index'),
         meta: { title: '同级同类医疗机构', roles: ['admin', 'equal'] }
       }
     ]
   },
   {
-    path: '',
+    path: '/total-area',
     component: Layout,
-    redirect: 'total-area',
+    redirect: '/total-area/index',
     meta: {
       roles: ['admin', 'totalarea']
     },
     children: [
       {
-        path: 'total-area',
+        path: 'index',
         name: '全区标准',
         component: () => import('@/views/whole_district_std/index'),
         meta: { title: '全区标准', roles: ['admin', 'totalarea'] }
@@ -82,15 +82,15 @@ export const systemMsgRouterMap = [
     ]
   },
   {
-    path: '',
+    path: '/hospital',
     component: Layout,
-    redirect: 'hospital',
+    redirect: '/hospital/index',
     meta: {
       roles: ['admin', 'hospital']
     },
     children: [
       {
-        path: 'hospital',
+        path: 'index',
         name: '本医院数据',
         component: () => import('@/views/hospital_data/index'),
         meta: { title: '本医院数据', roles: ['admin', 'hospital'] }
@@ -112,21 +112,21 @@ export const systemMsgRouterMap = [
       }
     ]
   },
-  {
-    path: '/user-manage1',
-    component: MngLayout,
-    meta: {
-      roles: ['admin']
-    },
-    children: [
-      {
-        path: 'index',
-        name: 'UserManage1',
-        component: () => import('@/views/user_manage/index'),
-        meta: { title: '用户管理1', roles: ['admin'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/user-manage1',
+  //   component: MngLayout,
+  //   meta: {
+  //     roles: ['admin']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'UserManage1',
+  //       component: () => import('@/views/user_manage/index'),
+  //       meta: { title: '用户管理1', roles: ['admin'] }
+  //     }
+  //   ]
+  // },
   {
     path: '/user-manage',
     component: MngLayout,
@@ -167,11 +167,26 @@ export const systemMsgRouterMap = [
       {
         path: 'index',
         name: 'ServiceManage',
-        component: () => import('@/views/service_manage/index'),
+        component: () => import('@/views/serviceMng/index'),
         meta: { title: '服务管理', roles: ['admin'] }
       }
     ]
   }
+  // {
+  //   path: '/service-manage1',
+  //   component: MngLayout,
+  //   meta: {
+  //     roles: ['admin']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'ServiceManage1',
+  //       component: () => import('@/views/service_manage/index'),
+  //       meta: { title: '服务管理1', roles: ['admin'] }
+  //     }
+  //   ]
+  // }
 ]
 
 export default new Router({

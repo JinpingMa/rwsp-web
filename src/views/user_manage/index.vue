@@ -12,7 +12,7 @@
                 <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="用户类型" prop="userType">
-                <el-select v-model="value" placeholder="医院用户">
+                <el-select v-model="value">
                     <el-option
                             v-for="item in options"
                             :key="item.value"

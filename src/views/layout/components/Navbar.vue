@@ -12,21 +12,22 @@
                     <i class="el-icon-caret-bottom"></i>
                 </div>
                 <el-dropdown-menu class="user-dropdown" slot="dropdown">
-                    <router-link class="inlineBlock" to="/">
-                        <!--<el-dropdown-item>-->
-                        <!--详细信息-->
-                        <!--</el-dropdown-item>-->
-                        <el-dropdown-item>
-                            <span @click="dialogFormVisible = true">修改密码</span>
-                        </el-dropdown-item>
-                    </router-link>
-                    <el-dropdown-item divided>
-                        <span @click="logout" style="display:block;">登出</span>
+                    <el-dropdown-item @click.native="dialogFormVisible = true">
+                        <span>修改密码</span>
+                    </el-dropdown-item>
+                    <!--<router-link class="inlineBlock" to="/">-->
+                        <!--&lt;!&ndash;<el-dropdown-item>&ndash;&gt;-->
+                        <!--&lt;!&ndash;详细信息&ndash;&gt;-->
+                        <!--&lt;!&ndash;</el-dropdown-item>&ndash;&gt;-->
+                        <!---->
+                    <!--</router-link>-->
+                    <el-dropdown-item divided @click.native="logout">
+                        <span style="display:block;">登出</span>
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </el-menu>
-        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" @close="handleClose('changeForm')">
             <el-form :model="changeForm" status-icon :rules="rules" ref="changeForm" label-width="100px"
                      class="demo-ruleForm">
                 <el-form-item label="用户名" prop="username">
@@ -137,6 +138,10 @@
             // this.dialogFormVisible = false
           }
         })
+      },
+      handleClose(formName) {
+        // 重置对话框，去除错误提示和已经填写的信息
+        this.$refs[formName].resetFields()
       }
     }
   }

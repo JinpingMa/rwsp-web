@@ -1,254 +1,150 @@
 <template>
     <div class="app-container">
-        <div class="text-container">
-            <div class="block1">
-                <el-tree
-                        :data="data1"
-                        show-checkbox
-                        @check-change="handleCheckChange">
-                </el-tree>
-                <el-tree
-                        :props="props1"
-                        :load="loadNode1"
-                        lazy
-                        show-checkbox>
-                </el-tree>
-            </div>
-            <div class="block2">
-                <el-table
-                        :data="tableData"
-                        stripe
-                        height="100%"
-                        border>
-                    <el-table-column
-                            prop="date"
-                            label="日期"
-                            width="120">
-                    </el-table-column>
-                    <el-table-column
-                            prop="name"
-                            label="姓名"
-                            width="100">
-                    </el-table-column>
-                    <el-table-column
-                            prop="address"
-                            label="地址">
-                    </el-table-column>
-                    <el-table-column label="操作" width="100">
-                        <template slot-scope="scope">
-                            <el-button
-                                    size="mini"
-                                    @click="handleEdit(scope.$index, scope.row)"
-                            >详细
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
+        <div class="condition-container">
+            <span>统计时间：</span>
+            <el-select v-model="value" placeholder="请选择时间">
+                <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <span>病种组合</span>
+            <el-input placeholder="支持编码和名称" auto-complete="on" maxlength=30 style="width:150px"></el-input>
+            <el-button type="primary">搜索</el-button>
+            <el-button>病种组合</el-button>
+            <el-button>机构</el-button>
+            <el-button>科室</el-button>
+            <el-button>医生组</el-button>
+            <el-button>数据下载</el-button>
         </div>
-        <modal name="hello-world" height="auto" :scrollable="true">
-            <div slot="top-right">
-                <button @click="$modal.hide('foo')">
-                    ❌
-                </button>
-            </div>
-            <div class="my-modal">
-                <p style="padding: 0px 20px">标题</p>
-                <div class='net-container'>
-                    <line-chart height='100%' width='100%' id='chart4'></line-chart>
-                </div>
-                <div class='net-container'>
-                    <line-chart height='100%' width='100%' id='chart5'></line-chart>
-                </div>
-                <div class='net-container'>
-                    <line-chart height='100%' width='100%' id='chart6'></line-chart>
-                </div>
-            </div>
-        </modal>
+        <el-table :data="list" stripe max-height="480" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
+            <el-table-column fixed align="center" label='统计时间(累积)' width="95">
+                <template slot-scope="scope">
+                    <i class="el-icon-time"></i>
+                    <span>{{scope.row.display_time}}</span>
+                    <!--{{scope.$index}}-->
+                </template>
+            </el-table-column>
+            <el-table-column label="机构编码">
+                <template slot-scope="scope">
+                    {{scope.row.pageviews}}
+                </template>
+            </el-table-column>
+            <el-table-column label="机构名称">
+                <template slot-scope="scope">
+                    {{scope.row.pageviews}}
+                </template>
+            </el-table-column>
+            <el-table-column label="机构分类" align="center">
+                <template slot-scope="scope">
+                    {{scope.row.pageviews}}
+                </template>
+            </el-table-column>
+            <el-table-column class-name="status-col" label="疾病代码+治疗方式代码" align="center">
+                <template slot-scope="scope">
+                    <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" prop="created_at" label="疾病名称+治疗方式名称">
+                <template slot-scope="scope">
+                    <i class="el-icon-time"></i>
+                    <span>{{scope.row.display_time}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="例数" align="center">
+                <template slot-scope="scope">
+                    {{scope.row.pageviews}}
+                </template>
+            </el-table-column>
+            <el-table-column label="住院总费用次均费用" align="center">
+                <template slot-scope="scope">
+                    {{scope.row.pageviews}}
+                </template>
+            </el-table-column>
+            <el-table-column label="住院药品费用次均费用" align="center">
+                <template slot-scope="scope">
+                    {{scope.row.pageviews}}
+                </template>
+            </el-table-column>
+            <el-table-column label="住院耗材费用次均费用" align="center">
+                <template slot-scope="scope">
+                    {{scope.row.pageviews}}
+                </template>
+            </el-table-column>
+            <el-table-column label="医生组" align="center">
+                <template slot-scope="scope">
+                    {{scope.row.pageviews}}
+                </template>
+            </el-table-column>
+            <el-table-column label="科室" align="center">
+                <template slot-scope="scope">
+                    {{scope.row.pageviews}}
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-button class="data-check">数据审批</el-button>
     </div>
 </template>
+
 <script>
+  import { getList } from '@/api/table'
+
   export default {
-    name: 'select-tree',
     data() {
       return {
-        data1: [
-          {
-            id: 1,
-            label: '一级 1',
-            children: [{
-              id: 4,
-              label: '二级 1-1',
-              children: [{
-                id: 9,
-                label: '三级 1-1-1'
-              }, {
-                id: 10,
-                label: '三级 1-1-2'
-              }]
-            }]
-          }, {
-            id: 2,
-            label: '一级 2',
-            children: [{
-              id: 5,
-              label: '二级 2-1'
-            }, {
-              id: 6,
-              label: '二级 2-2'
-            }]
-          }, {
-            id: 3,
-            label: '一级 3',
-            children: [{
-              id: 7,
-              label: '二级 3-1'
-            }, {
-              id: 8,
-              label: '二级 3-2'
-            }]
-          }, {
-            id: 4,
-            label: '一级 4',
-            isLeaf: false
-          }],
-        tableData: [
-          {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-08',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-06',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-07',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-08',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-06',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-07',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }],
-        defaultProps: {
-          children: 'children',
-          label: 'label'
-        },
-        props1: {
-          id: 'name',
-          label: 'name',
-          children: 'zones',
-          isLeaf: 'leaf'
-        }
+        list: null,
+        listLoading: true,
+        value: '',
+        options: [{
+          value: '201806',
+          label: '201806'
+        }, {
+          value: '201805',
+          label: '201805'
+        }, {
+          value: '201804',
+          label: '201804'
+        }, {
+          value: '201803',
+          label: '201803'
+        }, {
+          value: '201802',
+          label: '201802'
+        }]
       }
     },
+    filters: {
+      statusFilter(status) {
+        const statusMap = {
+          published: 'success',
+          draft: 'gray',
+          deleted: 'danger'
+        }
+        return statusMap[status]
+      }
+    },
+    created() {
+      this.fetchData()
+    },
     methods: {
-      handleCheckChange(data, checked, indeterminate) {
-        // console.log(data, checked, indeterminate)
-      },
-      handleEdit(index, row) {
-        this.$modal.show('hello-world')
-        console.log(index, row)
-      },
-      loadNode1(node, resolve) {
-        if (node.level === 0) {
-          return resolve([{ name: 'region' }])
-        }
-        if (node.level > 3) return resolve([])
-        if (node.level === 2) {
-          setTimeout(() => {
-            const data = [{
-              name: 'leaf',
-              leaf: true
-            }, {
-              name: 'zone',
-              leaf: true
-            }]
-            resolve(data)
-          }, 500)
-        }
-        setTimeout(() => {
-          const data = [{
-            name: 'leaf',
-            leaf: false
-          }, {
-            name: 'zone',
-            leaf: false
-          }]
-          resolve(data)
-        }, 500)
+      fetchData() {
+        this.listLoading = true
+        getList(this.listQuery).then(response => {
+          this.list = response.data.items
+          this.listLoading = false
+        })
       }
     }
   }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-    .invalid-time {
-        display: flex;
-        justify-content: flex-end;
+    .condition-container {
         margin-bottom: 20px;
-        a {
-            padding: 0 5px;
-            text-decoration: underline;
-        }
     }
-    .text-container {
-        display: flex;
-        .block1 {
-            min-width: 200px;
-            border: 1px solid #eee;
-        }
-        .block2 {
-            height: 400px;
-            margin-left: 20px;
-            min-width: calc(100% - 220px);
-        }
+    .data-check {
+        margin-top: 20px;
+        float: right;
     }
-    .net-container {
-        height: 300px;
-    }
-    .modal-style {
-        height: auto;
-
-    }
-
 </style>

@@ -22,8 +22,8 @@
         </el-button>
       </el-form-item>
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: admin</span>
+        <span style="margin-right:20px;">用户名: admin</span>
+        <span> 密码: admin</span>
       </div>
     </el-form>
   </div>
@@ -77,7 +77,7 @@ export default {
           this.$store.dispatch('LoginByUserName', this.loginForm).then(() => {
             this.loading = false
             this.$router.push({ path: '/' })
-            location.reload()
+            // location.reload()
             this.$store.dispatch('GenerateRouters', { roles: ['admin'] })
               .then(() => {
                 this.$router.addRoutes(this.$store.getters.addRouters)

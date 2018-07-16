@@ -1,7 +1,8 @@
 <template>
     <div class="app-container">
         <div class="condition-container">
-            <el-select v-model="value" placeholder="疾病代码+治疗方式代码">
+            <span>统计时间：</span>
+            <el-select v-model="value" placeholder="请选择时间">
                 <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -9,26 +10,17 @@
                     :value="item.value">
                 </el-option>
             </el-select>
-            <el-select v-model="value" placeholder="医生组">
-                <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-            </el-select>
-            <el-select v-model="value" placeholder="科室">
-                <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-            </el-select>
+            <span>病种组合</span>
+            <el-input placeholder="支持编码和名称" auto-complete="on" maxlength=30 style="width:150px"></el-input>
+            <el-button type="primary">搜索</el-button>
+            <el-button>病种组合</el-button>
+            <el-button>机构</el-button>
+            <el-button>科室</el-button>
+            <el-button>医生组</el-button>
             <el-button>数据下载</el-button>
         </div>
-        <el-table :data="list" stripe height="500px" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='统计时间(累积)' width="95">
+        <el-table :data="list" stripe max-height="430" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
+            <el-table-column fixed align="center" label='统计时间(累积)' width="95">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
                     <span>{{scope.row.display_time}}</span>
@@ -92,6 +84,16 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination
+            style="margin-top: 20px;"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="pageSizes"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+        </el-pagination>
         <el-button class="data-check">数据审批</el-button>
     </div>
 </template>
@@ -106,21 +108,25 @@
         listLoading: true,
         value: '',
         options: [{
-          value: '选项1',
-          label: '黄金糕'
+          value: '201806',
+          label: '201806'
         }, {
-          value: '选项2',
-          label: '双皮奶'
+          value: '201805',
+          label: '201805'
         }, {
-          value: '选项3',
-          label: '蚵仔煎'
+          value: '201804',
+          label: '201804'
         }, {
-          value: '选项4',
-          label: '龙须面'
+          value: '201803',
+          label: '201803'
         }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }]
+          value: '201802',
+          label: '201802'
+        }],
+        pageSizes: [10, 20, 30, 40],
+        pageSize: 10,
+        currentPage: 4,
+        total: 400
       }
     },
     filters: {
@@ -143,6 +149,12 @@
           this.list = response.data.items
           this.listLoading = false
         })
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`)
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
       }
     }
   }
