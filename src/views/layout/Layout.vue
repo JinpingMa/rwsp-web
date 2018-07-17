@@ -63,7 +63,7 @@
         width: 100%;
         .sidebar-container {
             top: 50px !important;
-            height: calc(100% - 50px) !important;
+            /*height: calc(100% - 50px) !important;*/
         }
         .my-header {
             background-color: #ccc;
@@ -81,7 +81,8 @@
         width: 100%;
         top: 0;
         height: 100%;
-        position: absolute;
+        /*position: absolute;*/
+        position: fixed;
         z-index: 999;
     }
 

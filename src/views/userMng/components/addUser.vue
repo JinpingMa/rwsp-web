@@ -11,7 +11,7 @@
                 <el-input v-model="ruleForm.checkPass"></el-input>
             </el-form-item>
             <el-form-item label="用户类型" prop="userType">
-                <el-select v-model="ruleForm.userType" placeholder="医院用户">
+                <el-select v-model="ruleForm.userType">
                     <el-option label="医院用户" value="shanghai"></el-option>
                     <el-option label="区县用户" value="beijing"></el-option>
                     <el-option label="卫计委管理员用户" value="item3"></el-option>
@@ -52,7 +52,7 @@ export default {
         username: '',
         password: '',
         checkPass: '',
-        userType: '',
+        userType: '医院用户',
         type: []
       },
       rules: {

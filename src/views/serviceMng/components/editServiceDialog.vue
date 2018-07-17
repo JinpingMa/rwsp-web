@@ -55,7 +55,7 @@
     },
     watch: {
       isVisible: function(newValue, oldValue) {
-        this.dialogFormVisible = newValue
+        newValue !== oldValue ? this.dialogFormVisible = newValue : ''
       }
     },
     created() {

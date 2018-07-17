@@ -34,17 +34,29 @@
 
 export default {
   data() {
-    var validatePass = (rule, value, callback) => {
+    const validateName = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'))
+        callback(new Error('请输入服务名称'))
       } else {
-        if (this.ruleForm.checkPass !== '') {
-          this.$refs.ruleForm.validateField('checkPass')
-        }
-        callback()
+        // const reg = /[\u4E00-\u9FA5]$/
+        const reg = /[\u4E00-\u9FA5\uF900-\uFA2D]$/
+        reg.test(value) ? callback() : callback(new Error('服务名必须是中文'))
       }
     }
-    var validatePass2 = (rule, value, callback) => {
+    const validateURL = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入服务接口URL'))
+      } else {
+        // const reg = /^[A-Za-z]+$/
+        const reg = /[\u4E00-\u9FA5]$/
+        reg.test(value) ? callback(new Error('请输入正确的格式')) : callback()
+        // if (this.ruleForm.checkPass !== '') {
+        //   this.$refs.ruleForm.validateField('checkPass')
+        // }
+        // callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
       } else if (value !== this.ruleForm.password) {
@@ -66,11 +78,12 @@ export default {
       rules: {
         serviceName: [
           { required: true, message: '请输入服务名', trigger: 'blur' },
-          { min: 5, message: '不少于 5 个字符', trigger: 'blur' }
+          { min: 5, message: '不少于 5 个字符', trigger: 'blur' },
+          { validator: validateName, trigger: 'blur' }
         ],
         serviceURL: [
           { required: true, message: '请输入服务接口', trigger: 'blur' },
-          { validator: validatePass, trigger: 'blur' }
+          { validator: validateURL, trigger: 'blur' }
         ],
         requestPara: [
           { required: true, message: '请输入请求参数', trigger: 'blur' },

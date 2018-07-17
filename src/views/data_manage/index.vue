@@ -1,70 +1,44 @@
 <template>
     <div class="app-container">
-        <el-table :data="list" stripe height="500px" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='统计时间(累积)' width="95">
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    <span>{{scope.row.display_time}}</span>
-                    <!--{{scope.$index}}-->
-                </template>
-            </el-table-column>
-            <el-table-column label="机构编码">
-                <template slot-scope="scope">
-                    {{scope.row.pageviews}}
-                </template>
-            </el-table-column>
-            <el-table-column label="机构名称">
-                <template slot-scope="scope">
-                    {{scope.row.pageviews}}
-                </template>
-            </el-table-column>
-            <el-table-column label="机构分类" align="center">
-                <template slot-scope="scope">
-                    {{scope.row.pageviews}}
-                </template>
-            </el-table-column>
-            <el-table-column class-name="status-col" label="疾病代码+治疗方式代码" align="center">
-                <template slot-scope="scope">
-                    <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column align="center" prop="created_at" label="疾病名称+治疗方式名称">
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    <span>{{scope.row.display_time}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="例数" align="center">
-                <template slot-scope="scope">
-                    {{scope.row.pageviews}}
-                </template>
-            </el-table-column>
-            <el-table-column label="住院总费用次均费用" align="center">
-                <template slot-scope="scope">
-                    {{scope.row.pageviews}}
-                </template>
-            </el-table-column>
-            <el-table-column label="住院药品费用次均费用" align="center">
-                <template slot-scope="scope">
-                    {{scope.row.pageviews}}
-                </template>
-            </el-table-column>
-            <el-table-column label="住院耗材费用次均费用" align="center">
-                <template slot-scope="scope">
-                    {{scope.row.pageviews}}
-                </template>
-            </el-table-column>
-            <el-table-column label="医生组" align="center">
-                <template slot-scope="scope">
-                    {{scope.row.pageviews}}
-                </template>
-            </el-table-column>
-            <el-table-column label="科室" align="center">
-                <template slot-scope="scope">
-                    {{scope.row.pageviews}}
-                </template>
-            </el-table-column>
-        </el-table>
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="添加数据" name="first">
+                <el-form :model="addDataForm" :rules="rules" ref="addDataForm" label-width="100px">
+                    <el-form-item label="数据时间" prop="date" required>
+                        <el-input  v-model="addDataForm.date" placeholder="时间格式:201606"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button @click="resetForm('addDataForm')">重置</el-button>
+                        <el-button type="primary">提交</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="数据列表" name="fourth">
+                <el-table :data="list" stripe height="500px" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
+                    <el-table-column align="center" label='时间段' width="95">
+                        <template slot-scope="scope">
+                            <i class="el-icon-time"></i>
+                            <span>{{scope.row.display_time}}</span>
+                            <!--{{scope.$index}}-->
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="名称">
+                        <template slot-scope="scope">
+                            {{scope.row.pageviews}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            {{scope.row.pageviews}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="审批/撤销" align="center">
+                        <template slot-scope="scope">
+                            {{scope.row.pageviews}}
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </template>
 
@@ -73,10 +47,33 @@
 
   export default {
     data() {
+      const validateTime = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入时间'))
+        } else {
+          const reg = /^[1-2][0-9]{5}$/
+          const date = value.trim()
+          if (date.length === 6 && reg.test(date)) {
+            callback()
+          } else {
+            callback(new Error('日期格式不对，日期格式:201806'))
+          }
+        }
+      }
       return {
+        addDataForm: {
+          date: ''
+        },
+        rules: {
+          date: [
+            { required: true, message: '请输入时间', trigger: 'blur' },
+            { validator: validateTime, trigger: 'blur' }
+          ]
+        },
         list: null,
         listLoading: true,
         value: '',
+        activeName: 'first',
         options: [{
           value: '选项1',
           label: '黄金糕'
@@ -115,6 +112,12 @@
           this.list = response.data.items
           this.listLoading = false
         })
+      },
+      handleClick(tab, event) {
+        console.log(tab, event)
+      },
+      resetForm(formData) {
+        this.$refs[formData].resetFields()
       }
     }
   }
